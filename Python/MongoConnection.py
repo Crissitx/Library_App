@@ -37,7 +37,24 @@ def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: s
     except pymongo.errors.WriteError as e:
         print("Error al actualizar el documento:", e)
         return False
+    
+def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: str, filter, new_data):
+    try:
+        # Acceder a la base de datos y la colección
+        db = client[db_name]
+        collection = db[collection_name]
+        
+        collection.update_many(filter, {"$set": new_data})
 
+        print("Documentos actualizado exitosamente.")
+        return True
+    except pymongo.errors.CollectionInvalid as e:
+        print("Error al acceder a la colección:", e)
+        return False
+    except pymongo.errors.WriteError as e:
+        print("Error al actualizar los documentos:", e)
+        return False
+    
 # TEST
 client = ConnectToMongo()
 if client:
