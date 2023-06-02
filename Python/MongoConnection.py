@@ -89,7 +89,6 @@ def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
         print("Error al actualizar los documentos:", e)
         return False
     
-# UPDATE TEST
 client = ConnectToMongo()
 
 # UPDATE TEST
