@@ -21,11 +21,26 @@ def SearchDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
     except pymongo.errors.CollectionInvalid as e:
         print("Error triying to access to Collection:", collection_name, ":", e)
 
+def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, filter, new_data):
+    try:
+        # Acceder a la base de datos y la colección
+        db = client[db_name]
+        collection = db[collection_name]
+        
+        collection.update_one(filter, {"$set": new_data})
+
+        print("Documento actualizado exitosamente.")
+        return True
+    except pymongo.errors.CollectionInvalid as e:
+        print("Error al acceder a la colección:", e)
+        return False
+    except pymongo.errors.WriteError as e:
+        print("Error al actualizar el documento:", e)
+        return False
 
 # TEST
 client = ConnectToMongo()
 if client:
     filter = {"id_area": 1}
-    results = SearchDocuments(client, "Biblioteca", "libro", filter)
-    for document in results:
-        print(document)
+    update = {"DESCRIPCION_AREA": "Literatura"}
+    UpdateDocument(client, "Biblioteca", "area", filter, update)
