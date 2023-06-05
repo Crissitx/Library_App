@@ -33,7 +33,7 @@ def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: s
 def index(request):
     return HttpResponse("¡Hola, mundo!")
 
-def login(request):
+def login(request):        
     conexion = ConnectToMongo()
     val = True
     val2 = False
