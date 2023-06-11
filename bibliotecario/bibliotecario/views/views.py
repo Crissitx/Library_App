@@ -1,7 +1,32 @@
 from django.shortcuts import render
 from django.http import HttpResponse
+from random import randint
 import pymongo
 
+
+
+def AddDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, document):
+    try:
+        # Acceder a la base de datos y la colección
+        db = client[db_name]
+        collection = db[collection_name]
+
+        # Agregar el documento
+        result = collection.insert_one(document)
+
+        print("Documento agregado exitosamente. ID:", result.inserted_id)
+        return True
+
+    except pymongo.errors.CollectionInvalid as e:
+        print("Error al acceder a la colección:", e)
+        return False
+    except pymongo.errors.WriteError as e:
+        print("Error al agregar el documento:", e)
+        return False
+
+
+def id_generator():
+    return randint(1, 10000)
 def ConnectToMongo():
     try:
         client = pymongo.MongoClient("mongodb+srv://bibliotecario:bibliotecario123@biblioteca0.mglvdip.mongodb.net/?retryWrites=true&w=majority")
@@ -35,15 +60,41 @@ def index(request):
 
 def login(request):        
     conexion = ConnectToMongo()
-    val = True
-    val2 = False
-    if conexion:
-        variable1 = val
-    else:
-        variable1 = val2
-    context = {'test1': variable1}
     
-    return render(request, 'login.html', context)
+    if request.method == 'POST':
+        db = conexion.Biblioteca
+        print(request.method)
+        print("hellloooooooooooooooo ")
+        name = request.POST.get('name')
+        edad = request.POST.get('edad')
+        password = request.POST.get('password')
+        dir = request.POST.get('dir')
+        programa = request.POST.get('Programa')
+        print(name, edad, dir, programa)
+        context = {'name': name,
+                   'edad': edad,
+                   'dir': dir,
+                   'password': password}
+        last_document = db.estudiantes.find().sort("_id", -1).limit(1)
+        doc_list = list(last_document)
+        last_id = doc_list[0]["_id"] if len(doc_list) > 0 else 0
+        new_id = last_id + 1
+        document = {
+            "_id": new_id,
+            "id_estudiante": new_id,
+            "documento": request.POST.get('password'),
+            "nombre": request.POST.get('name'),
+            "direccion": request.POST.get('dir'),
+            "programa": request.POST.get('Programa'),
+            "edad": request.POST.get('edad')
+        }
+        AddDocument(conexion, "Biblioteca", "estudiantes", document)
+        return render(request, 'result.html', context)
+    
+    
+    
+    
+    return render(request, 'login.html')
 
 def contact(request):
   
