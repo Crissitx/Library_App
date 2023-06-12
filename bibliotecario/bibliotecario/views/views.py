@@ -58,23 +58,17 @@ def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: s
 def index(request):
     return HttpResponse("¡Hola, mundo!")
 
-def login(request):        
+def login(request):
+    
+    
+    return render(request, "login.html")
+
+
+def registro(request):        
     conexion = ConnectToMongo()
     
     if request.method == 'POST':
         db = conexion.Biblioteca
-        print(request.method)
-        print("hellloooooooooooooooo ")
-        name = request.POST.get('name')
-        edad = request.POST.get('edad')
-        password = request.POST.get('password')
-        dir = request.POST.get('dir')
-        programa = request.POST.get('Programa')
-        print(name, edad, dir, programa)
-        context = {'name': name,
-                   'edad': edad,
-                   'dir': dir,
-                   'password': password}
         last_document = db.estudiantes.find().sort("_id", -1).limit(1)
         doc_list = list(last_document)
         last_id = doc_list[0]["_id"] if len(doc_list) > 0 else 0
@@ -89,12 +83,10 @@ def login(request):
             "edad": request.POST.get('edad')
         }
         AddDocument(conexion, "Biblioteca", "estudiantes", document)
-        return render(request, 'result.html', context)
-    
-    
-    
-    
-    return render(request, 'login.html')
+        return render(request, 'login.html')
+    return render(request, 'register.html')
+
+
 
 def contact(request):
   

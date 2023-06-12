@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,9 +7,9 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Register</title>
 
-    <link rel="stylesheet" href="fonts/material-icon/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'fonts/material-icon/css/material-design-iconic-font.min.css' %}">
 
-    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <header>
@@ -27,22 +28,23 @@
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" id="signup-form" class="signup-form">
+                        {% csrf_token %}
                         <h2 class="form-title">Crear cuenta</h2>
                         <div class="form-group">
                             <input type="text" class="form-input" name="name" id="name" placeholder="Nombre"/>
                         </div>
                         <div class="form-group">
-                            <input type="number" class="form-input" name="name" id="name" min = "0" max ="150" placeholder="Edad"/>
+                            <input type="number" class="form-input" name="edad" id="edad" min = "0" max ="150" placeholder="Edad"/>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-input" name="name" id="name" placeholder="Direccion"/>
+                            <input type="text" class="form-input" name="dir" id="dir" placeholder="Direccion"/>
                         </div>
                         <div class="form-group">
                             <input type="text" class="form-input" name="password" id="password" placeholder="Documento"/>
                             <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-input" name="name" id="name" placeholder="Programa"/>
+                            <input type="text" class="form-input" name="Programa" id="Programa" placeholder="Programa"/>
                         </div>
                         <div class="form-group">
                             <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
@@ -53,16 +55,13 @@
                         </div>
                     </form>
                     <p class="loginhere">
-                        Ya tienes una cuenta? <a href="#" class="loginhere-link">Inicia seccion</a>
+                        Ya tienes una cuenta? <a href="{% url '' %}" class="loginhere-link">Inicia seccion</a>
                     </p>
                 </div>
             </div>
         </section>
 
     </div>
-
-    <script src="vendor/jquery/jquery.min.js"></script>
-    <script src="js/main.js"></script>
 </body>
 </html>
 
