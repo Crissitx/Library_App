@@ -2,70 +2,91 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from random import randint
 import pymongo
+from subprocess import Popen, PIPE
+from Python import MongoConnection
 
 
+# ELIMINE ESTO Y SOLO IMPORTAMOS DE MONGOCONNECTION
 
-def AddDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, document):
-    try:
-        # Acceder a la base de datos y la colección
-        db = client[db_name]
-        collection = db[collection_name]
-
-        # Agregar el documento
-        result = collection.insert_one(document)
-
-        print("Documento agregado exitosamente. ID:", result.inserted_id)
-        return True
-
-    except pymongo.errors.CollectionInvalid as e:
-        print("Error al acceder a la colección:", e)
-        return False
-    except pymongo.errors.WriteError as e:
-        print("Error al agregar el documento:", e)
-        return False
-
+#def AddDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, document):
+#    try:
+#        # Acceder a la base de datos y la colección
+#        db = client[db_name]
+#        collection = db[collection_name]
+#
+#        # Agregar el documento
+#        result = collection.insert_one(document)
+#
+#        print("Documento agregado exitosamente. ID:", result.inserted_id)
+#        return True
+#
+#    except pymongo.errors.CollectionInvalid as e:
+#        print("Error al acceder a la colección:", e)
+#        return False
+#    except pymongo.errors.WriteError as e:
+#        print("Error al agregar el documento:", e)
+#        return False
 
 def id_generator():
     return randint(1, 10000)
-def ConnectToMongo():
-    try:
-        client = pymongo.MongoClient("mongodb+srv://bibliotecario:bibliotecario123@biblioteca0.mglvdip.mongodb.net/?retryWrites=true&w=majority")
-        print("Succesfully connected to MongoDB")
-        return client
-    except pymongo.errors.ConnectionError as e:
-        print("Error connecting to MongoDB:", e)
+#def ConnectToMongo():
+#    try:
+#        client = pymongo.MongoClient("mongodb+srv://bibliotecario:bibliotecario123@biblioteca0.mglvdip.mongodb.net/?retryWrites=true&w=majority")
+#        print("Succesfully connected to MongoDB")
+#        return client
+#    except pymongo.errors.ConnectionError as e:
+#        print("Error connecting to MongoDB:", e)
 
+# LO MISMO AQUI
 
-def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, filter, new_data):
-    try:
-        # Acceder a la base de datos y la colección
-        db = client[db_name]
-        collection = db[collection_name]
-        
-        collection.update_one(filter, {"$set": new_data})
-
-        print("Documento actualizado exitosamente.")
-        return True
-    except pymongo.errors.CollectionInvalid as e:
-        print("Error al acceder a la colección:", e)
-        return False
-    except pymongo.errors.WriteError as e:
-        print("Error al actualizar el documento:", e)
-        return False
-    
-    
+#def UpdateDocument(client: pymongo.MongoClient, db_name: str, collection_name: str, filter, new_data):
+#    try:
+#        # Acceder a la base de datos y la colección
+#        db = client[db_name]
+#        collection = db[collection_name]
+#        
+#        collection.update_one(filter, {"$set": new_data})
+#
+#        print("Documento actualizado exitosamente.")
+#        return True
+#    except pymongo.errors.CollectionInvalid as e:
+#        print("Error al acceder a la colección:", e)
+#        return False
+#    except pymongo.errors.WriteError as e:
+#        print("Error al actualizar el documento:", e)
+#        return False
     
 def index(request):
     return HttpResponse("¡Hola, mundo!")
 
 def login(request):
-    
-    
-    return render(request, "login.html")
+    client = MongoConnection.ConnectToMongo()
+    if client:
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            doc = request.POST.get('document')
+            filter = {
+                "$and": [
+                    {"documento": {"$regex": doc}},
+                    {"nombre": {"$regex": name, "$options": "i"}}
+                ]
+            }
+            results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter)
+            
+            for result in results:
+                print(result)
 
+            return render(request, "login.html")
+        else:
+            print("Error, no hubo method post(?)")
+            return render(request, "login.html")
+    else:
+        #No hubo conexion :d
+        print("Error conectandose a la db")
+        return render(request, "login.html")
 
 def registro(request):        
-    conexion = ConnectToMongo()
+    conexion = MongoConnection.ConnectToMongo()
     
     if request.method == 'POST':
         db = conexion.Biblioteca
@@ -82,12 +103,9 @@ def registro(request):
             "programa": request.POST.get('Programa'),
             "edad": request.POST.get('edad')
         }
-        AddDocument(conexion, "Biblioteca", "estudiantes", document)
+        MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return render(request, 'login.html')
     return render(request, 'register.html')
 
-
-
 def contact(request):
-  
     return render(request, 'contact.html')
