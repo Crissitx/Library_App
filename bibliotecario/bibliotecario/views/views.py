@@ -64,16 +64,21 @@ def login(request):
         if request.method == 'POST':
             name = request.POST.get('name')
             doc = request.POST.get('password')
-            filter = {
+            filter_ = {
                 "$and": [
                     {"documento": {"$regex": doc}},
                     {"nombre": {"$regex": name, "$options": "i"}}
                 ]
             }
-            results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter)
-            
-            for result in results:
-                print(result)
+
+            results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter_)
+            resultsList = list(results)
+
+            if len(resultsList) > 0:
+                print("Conexion exitosa, bienvenid@:", name)
+                # NO SE QUE MAS HACER DESDE AQUI: ATT CRIS
+            else:
+                print("Tuki, no existe persona con ese nombre")
 
             return render(request, "login.html")
         else:
