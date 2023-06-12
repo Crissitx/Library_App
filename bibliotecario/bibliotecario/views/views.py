@@ -3,8 +3,7 @@ from django.http import HttpResponse
 from random import randint
 import pymongo
 from subprocess import Popen, PIPE
-from Python import MongoConnection
-
+import MongoConnection
 
 # ELIMINE ESTO Y SOLO IMPORTAMOS DE MONGOCONNECTION
 
@@ -64,7 +63,7 @@ def login(request):
     if client:
         if request.method == 'POST':
             name = request.POST.get('name')
-            doc = request.POST.get('document')
+            doc = request.POST.get('password')
             filter = {
                 "$and": [
                     {"documento": {"$regex": doc}},
