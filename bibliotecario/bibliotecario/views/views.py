@@ -2,6 +2,8 @@ from datetime import date, timedelta
 from django.shortcuts import render
 import MongoConnection
 from django.shortcuts import redirect
+from bson.objectid import ObjectId
+
 
 def add_days(date_value, days):
     return date_value + timedelta(days=days)
@@ -16,6 +18,16 @@ def prestamo(request):
     context = {'libros': libros,
                'today': today,
                'max_days': max_days,}
+    if request.method == 'POST':
+        nuevo_id = ObjectId()
+        estudiante_id = request.session['username']
+        document = {"_id": nuevo_id,
+                    "estudiante_id": estudiante_id,}
+
+        return redirect('prestamo_url')
+    
+    
+    
     return render(request, 'prestamos.html', context)
 
 def login(request):
@@ -24,20 +36,30 @@ def login(request):
         if request.method == 'POST':
             name = request.POST.get('name')
             doc = request.POST.get('password')
+            docp = doc
             filter_ = {
                 "$and": [
                     {"documento": {"$regex": doc}},
                     {"nombre": {"$regex": name, "$options": "i"}}
                 ]
             }
+
             results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter_)
             resultsList = list(results)
 
             if len(resultsList) > 0:
+                db = client.Biblioteca
                 print("Conexion exitosa, bienvenid@:", name)
-                
-                request.session['username'] = name
-                # NO SE QUE MAS HACER DESDE AQUI: ATT CRIS
+                filter =  {
+                "$and": [
+                    {"documento": {"$regex": doc}},
+                    {"nombre": {"$regex": name, "$options": "i"}}
+                ]
+            }
+                results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter_)
+                estudiante_ids = [str(estudiante["_id"]) for estudiante in results]
+                id_estudiante = estudiante_ids if estudiante_ids else 0
+                request.session['estudiante_id'] = id_estudiante
             else:
                 print("Tuki, no existe persona con ese nombre/documento")
 
@@ -51,27 +73,10 @@ def login(request):
         return render(request, "login.html")
 
 def registro(request):        
-    client = MongoConnection.ConnectToMongo()
-    
-    db = client['Biblioteca']
-    collection = db['PROGRAMAS']
-
-    id_programas = db.PROGRAMAS.distinct('PROGRAMA')
-
-    nombres = []
-
-    for id_programa in id_programas:
-        result = collection.find_one({'PROGRAMA': id_programa}, {'NOMBRE': 1})
-        nombres.append(result['NOMBRE'])
-
-    programas_data = zip(id_programas, nombres)
-
-    context = {'programas_data': programas_data}
-
-    print("Context succesfully sended")
+    conexion = MongoConnection.ConnectToMongo()
     
     if request.method == 'POST':
-        db = client.Biblioteca
+        db = conexion.Biblioteca
         last_document = db.estudiantes.find().sort("_id", -1).limit(1)
         doc_list = list(last_document)
         last_id = doc_list[0]["_id"] if len(doc_list) > 0 else 0
@@ -82,15 +87,9 @@ def registro(request):
             "documento": request.POST.get('doc_type') + "-" + request.POST.get('password'),
             "nombre": request.POST.get('name'),
             "direccion": request.POST.get('dir'),
-            "programa": int(request.POST.get('programa')),
+            "programa": int(request.POST.get('Programa')),
             "edad": int(request.POST.get('edad'))
         }
-        MongoConnection.AddDocument(client, "Biblioteca", "estudiantes", document)
+        MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return redirect('/')
-    return render(request, 'register.html', context)
-
-def menu(request):
-    return render(request, 'menu.html')
-
-def contact(request):
-    return render(request, 'contact.html')
+    return render(request, 'register.html')
