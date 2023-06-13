@@ -1,4 +1,4 @@
-from datetime import date, timedelta, datetime
+from datetime import date, timedelta
 from django.shortcuts import render
 import MongoConnection
 from django.shortcuts import redirect
@@ -29,16 +29,40 @@ def prestamo(request):
     context = {'libros': lib_data,
                'today': today,
                'max_days': max_days,}
-    estudiante_id = request.session['estudiante_id']
+    
     if request.method == 'POST':
         nuevo_id = ObjectId()
+        estudiante_id = request.session['estudiante_id']
+        fecha_in = request.POST.get('fecha_in')
+        fecha_fin = request.POST.get('fecha_fin')
+        print(fecha_in)
+        print(fecha_fin)            
+        dias =MongoConnection.calcular_dias_transcurridos(fecha_fin)
+        if 7 == 7 : 
+            multa = 0 
+        else : 
+            col = db['estudiantes']
+            col2 = db['PROGRAMAS']
+            id_pro = col.find_one({'id_estudiante': estudiante_id})
+            id_pro =  id_pro['id_programa'] if id_pro else 0
+            resultado = col2.find_one({'programa': id_pro})
+            yesno = resultado['MULTA'] if id_pro else "no"
+            if yesno == "no":
+                multa = 0
+            else:
+                multa = resultado['valor_multa_dia']
+                print(multa)    
+            
+            
+            
+                    
         """   
         document = {"_id": nuevo_id,
                     "estudiante_id": ObjectId(estudiante_id),
                     "libro_id": ObjetcId(reques.POST.get('libro')),
-                    "fecha_incio": request.POST.get('fechan_in),
-                    "fecha_final": request.POST.get('fecha_fin'),
-                    "multa": 0} """ 
+                    "fecha_incio": fecha_in,
+                    "fecha_final": ,
+                    "multa": multa} """ 
 
         return redirect('prestamo_url')
     

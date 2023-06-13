@@ -1,4 +1,6 @@
 import pymongo
+from datetime import datetime, date
+
 
 def ConnectToMongo():
     try:
@@ -88,3 +90,13 @@ def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
     except pymongo.errors.WriteError as e:
         print("Error al actualizar los documentos:", e)
         return False
+    
+def calcular_dias_transcurridos(fecha_anterior):
+    fecha_anterior = datetime.strptime(fecha_anterior, "%Y-%m-%d").date()  # Convertir fecha_anterior a objeto date
+    fecha_actual = date.today()  # Obtener la fecha actual como objeto date
+    dias_transcurridos = (fecha_actual - fecha_anterior).days  # Calcular diferencia en días
+    return dias_transcurridos
+    
+    
+    
+    
