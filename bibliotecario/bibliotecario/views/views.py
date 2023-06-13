@@ -1,9 +1,10 @@
 from datetime import date, timedelta
 from django.shortcuts import render
-from subprocess import Popen, PIPE
 import MongoConnection
 from django.shortcuts import redirect
 
+def add_days(date_value, days):
+    return date_value + timedelta(days=days)
     
 def prestamo(request):
     today = date.today()
@@ -11,6 +12,7 @@ def prestamo(request):
     conexion = MongoConnection.ConnectToMongo()
     db = conexion.Biblioteca
     libros = db.libro.distinct('Titulo_libro')
+    max_days = add_days(today, max_days)
     context = {'libros': libros,
                'today': today,
                'max_days': max_days,}
@@ -34,6 +36,8 @@ def login(request):
 
             if len(resultsList) > 0:
                 print("Conexion exitosa, bienvenid@:", name)
+                
+                request.session['username'] = name
                 # NO SE QUE MAS HACER DESDE AQUI: ATT CRIS
             else:
                 print("Tuki, no existe persona con ese nombre/documento")
