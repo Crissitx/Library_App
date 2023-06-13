@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group">
                             <div class="input-wrapper">
-                                <select name="doc_type" id="doc_type" class="form-input">
+                                <select name="doc_type" id="doc_type" class="form-input select-arrow">
                                   <option value="TI">TI</option>
                                   <option value="CC">CC</option>
                                 </select>
@@ -46,8 +46,7 @@
                         </div>
                         {% csrf_token %}
                         <div class="form-group">
-                            <select id="programas-select" class="form-input" name="programa" id="programa">
-                                <option value="">Selecciona un programa</option>
+                            <select id="programas-select" class="form-input select-arrow" name="programa" id="programa">
                                 {%for data in programas_data%}
                                 <option value="{{data.0}}">{{ data.1 }}</option>
                                 {% endfor %}
