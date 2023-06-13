@@ -36,7 +36,7 @@ def login(request):
                 print("Conexion exitosa, bienvenid@:", name)
                 # NO SE QUE MAS HACER DESDE AQUI: ATT CRIS
             else:
-                print("Tuki, no existe persona con ese nombre")
+                print("Tuki, no existe persona con ese nombre/documento")
 
             return render(request, "login.html")
         else:
