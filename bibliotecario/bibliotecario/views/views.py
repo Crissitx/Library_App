@@ -18,9 +18,11 @@ def prestamo(request):
     context = {'libros': libros,
                'today': today,
                'max_days': max_days,}
+    estudiante_id = request.session['estudiante_id']
+    print(estudiante_id)
     if request.method == 'POST':
         nuevo_id = ObjectId()
-        estudiante_id = request.session['username']
+      
         document = {"_id": nuevo_id,
                     "estudiante_id": estudiante_id,}
 
@@ -96,4 +98,5 @@ def registro(request):
     return render(request, 'register.html')
 
 def menu(request):
+    print(request.session['estudiante_id'])
     return render(request, 'menu.html')
