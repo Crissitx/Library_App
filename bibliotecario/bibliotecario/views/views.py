@@ -28,8 +28,6 @@ def prestamo(request):
 
         return redirect('prestamo_url')
     
-    
-    
     return render(request, 'prestamos.html', context)
 
 def login(request):
@@ -77,6 +75,21 @@ def login(request):
 
 def registro(request):        
     conexion = MongoConnection.ConnectToMongo()
+
+    db = conexion['Biblioteca']
+    collection = db['PROGRAMAS']
+
+    id_programas = db.PROGRAMAS.distinct('PROGRAMA')
+
+    nombres = []
+
+    for id_programa in id_programas:
+        result = collection.find_one({'PROGRAMA': id_programa}, {'NOMBRE': 1})
+        nombres.append(result['NOMBRE'])
+    
+    programas_data = zip(id_programas, nombres)
+
+    context = {'programas_data': programas_data}
     
     if request.method == 'POST':
         db = conexion.Biblioteca
@@ -90,12 +103,12 @@ def registro(request):
             "documento": request.POST.get('doc_type') + "-" + request.POST.get('password'),
             "nombre": request.POST.get('name'),
             "direccion": request.POST.get('dir'),
-            "programa": int(request.POST.get('Programa')),
+            "programa": int(request.POST.get('programa')),
             "edad": int(request.POST.get('edad'))
         }
         MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return redirect('/')
-    return render(request, 'register.html')
+    return render(request, 'register.html', context)
 
 def menu(request):
     print(request.session['estudiante_id'])
