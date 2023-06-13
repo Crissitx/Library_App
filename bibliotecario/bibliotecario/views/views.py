@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+from datetime import date, timedelta, datetime
 from django.shortcuts import render
 import MongoConnection
 from django.shortcuts import redirect
@@ -13,21 +13,31 @@ def prestamo(request):
     max_days = 7
     conexion = MongoConnection.ConnectToMongo()
     db = conexion.Biblioteca
-    libros = db.libro.distinct('Titulo_libro')
+    collection = db['libro']
+
+    libros = collection.find({}, {'_id': 1, 'Titulo_libro': 1})
+
+    nombres = []
+    ids = []
+
+    for libro in libros:
+        nombres.append(libro['Titulo_libro'])
+        ids.append(libro['_id'])
+    
+    lib_data = zip(ids, nombres)
     max_days = add_days(today, max_days)
-    context = {'libros': libros,
+    context = {'libros': lib_data,
                'today': today,
                'max_days': max_days,}
     estudiante_id = request.session['estudiante_id']
-    print(estudiante_id)
     if request.method == 'POST':
         nuevo_id = ObjectId()
         """   
         document = {"_id": nuevo_id,
                     "estudiante_id": ObjectId(estudiante_id),
-                    "libro_id":,
-                    "fecha_incio":,
-                    "fecha_final":,
+                    "libro_id": ObjetcId(reques.POST.get('libro')),
+                    "fecha_incio": request.POST.get('fechan_in),
+                    "fecha_final": request.POST.get('fecha_fin'),
                     "multa": 0} """ 
 
         return redirect('prestamo_url')
