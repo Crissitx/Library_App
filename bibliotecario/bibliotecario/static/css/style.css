@@ -9,6 +9,14 @@ list-type-ulli {
   margin: 0;
   padding: 0; }
 
+/* Roboto Regular */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight:normal;
+  font-style:normal;
+  src: url("../../fonts/Roboto-Regular.ttf");
+}
 /* Montserrat-300 - latin */
 @font-face {
   font-family: 'Montserrat';
@@ -112,6 +120,7 @@ figure {
   margin: 0; }
 
 p {
+  font-family: 'Roboto';
   margin-bottom: 0px;
   font-size: 15px;
   color: #777; }
@@ -122,7 +131,7 @@ h2 {
   padding: 0;
   font-weight: 900;
   color: #222;
-  font-family: 'Montserrat';
+  font-family: 'Roboto';
   font-size: 24px;
   text-transform: uppercase;
   text-align: center;
@@ -253,6 +262,7 @@ body {
       color: #222; }
 
 .form-submit {
+  cursor: pointer;
   width: 100%;
   border-radius: 5px;
   -moz-border-radius: 5px;
