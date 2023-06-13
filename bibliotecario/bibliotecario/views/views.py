@@ -150,5 +150,34 @@ def menu(request):
     return render(request, 'menu.html', context)
 
 def historial(request):
-    print(request.session['estudiante_id'])
-    return render(request, 'historial.html')
+    estudiante_id = request.session['estudiante_id'][0]      
+    client = MongoConnection.ConnectToMongo()
+    db = client['Biblioteca']
+    collection = db['Multas']
+    collection2 = db['libro']
+    prestados = collection.find({'estudiante_id': estudiante_id})
+    libros = []
+    fechaInicial = []
+    fechafinal = []
+    multa = []
+    for p in prestados:
+        libros.append(p['libro_id'])
+        fechaInicial.append(p['fecha_incio'])
+        fechafinal.append(p['fecha_final'])
+        multa.append(p['multa_id'])
+                        
+                
+    libros_nombres = []
+    if libros != None:
+        print ("hola fir")
+        for libro_id in libros:
+            
+            libro = collection2.find_one({'Id_libro': libro_id})
+       # if libro:
+           # libros_nombres.append(libro['nombre'])                   
+                        
+                         
+    data = zip((libros_nombres, fechaInicial, fechafinal, multa))     
+    contex = {'data': data}
+
+    return render(request, 'historial.html', contex)
