@@ -89,5 +89,8 @@ def registro(request):
         return redirect('/')
     return render(request, 'register.html', context)
 
+def menu(request):
+    return render(request, 'menu.html')
+
 def contact(request):
     return render(request, 'contact.html')
