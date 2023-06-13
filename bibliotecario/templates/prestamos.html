@@ -34,7 +34,11 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="fecha">Selecciona una fecha</label>
+                            <label for="fecha">Selecciona una fecha inicial</label>
+                            <input type="date" id="fecha"min= "{{ today }}" max =" {{ max_days }} " name="fecha" class="form-input" name="name" id="name" placeholder="Nombre" >
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha">Selecciona una fecha final</label>
                             <input type="date" id="fecha"min= "{{ today }}" max =" {{ max_days }} " name="fecha" class="form-input" name="name" id="name" placeholder="Nombre" >
                         </div>
                         <div class="form-group">
