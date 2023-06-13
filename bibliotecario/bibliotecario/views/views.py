@@ -111,5 +111,13 @@ def registro(request):
     return render(request, 'register.html', context)
 
 def menu(request):
-    print(request.session['estudiante_id'])
-    return render(request, 'menu.html')
+    client = MongoConnection.ConnectToMongo()
+    loggedStudentId = int(request.session['estudiante_id'][0])
+
+    filter = {'id_estudiante': loggedStudentId}
+
+    results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter)
+
+    context = {'student_name': results[0]['nombre'],}
+
+    return render(request, 'menu.html', context)
