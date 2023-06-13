@@ -87,6 +87,7 @@ def login(request):
                 estudiante_ids = [str(estudiante["_id"]) for estudiante in results]
                 id_estudiante = estudiante_ids if estudiante_ids else 0
                 request.session['estudiante_id'] = id_estudiante
+                MongoConnection.UpdateMultas()
                 return redirect('menu_url')
             else:
                 print("Tuki, no existe persona con ese nombre/documento")
@@ -155,7 +156,7 @@ def historial(request):
     db = client['Biblioteca']
     collection = db['Multas']
     collection2 = db['libro']
-    prestados = collection.find()
+    prestados = collection.find({})
     libros = []
     fechaInicial = []
     fechafinal = []

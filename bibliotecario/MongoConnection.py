@@ -135,3 +135,5 @@ def calcular_dias_transcurridos(fecha_anterior):
     dias_transcurridos = (fecha_actual - fecha_anterior).days  # Calcular diferencia en días
     #print("Dias transcurridos", dias_transcurridos)
     return dias_transcurridos
+
+UpdateMultas()
