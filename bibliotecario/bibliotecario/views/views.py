@@ -44,22 +44,21 @@ def prestamo(request):
         else : 
             col = db['estudiantes']
             col2 = db['PROGRAMAS']
-            id_pro = col.find_one({'id_estudiante': estudiante_id })
-            id_programa =  id_pro['id_programa'] if id_pro else 0
-            resultado = col2.find_one({'programa': id_programa})
+            id_pro = col.find_one({'id_estudiante': int(estudiante_id) })
+            id_programa =  id_pro['programa'] if id_pro else 0
+            resultado = col2.find_one({'PROGRAMA': id_programa})
             yesno = resultado['MULTA'] if id_pro else "no"
             if yesno == "no":
                 multa = 0
             else:
                 multa = resultado['valor_multa_dia']
-                print(multa)    
                
         document = {"_id": nuevo_id,
                     "estudiante_id": int(estudiante_id),
                     "libro_id": int(request.POST.get('libro')),
                     "fecha_incio": fecha_in,
                     "fecha_final": fecha_fin,
-                    "multa": 0}
+                    "multa": multa}
         
         MongoConnection.AddDocument(conexion, "Biblioteca", "Multas", document)
         return redirect('prestamo_url')
