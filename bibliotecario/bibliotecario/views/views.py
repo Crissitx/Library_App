@@ -60,6 +60,7 @@ def login(request):
                 estudiante_ids = [str(estudiante["_id"]) for estudiante in results]
                 id_estudiante = estudiante_ids if estudiante_ids else 0
                 request.session['estudiante_id'] = id_estudiante
+                return redirect('menu_url')
             else:
                 print("Tuki, no existe persona con ese nombre/documento")
 
