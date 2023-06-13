@@ -81,7 +81,7 @@ def registro(request):
             "documento": request.POST.get('doc_type') + "-" + request.POST.get('password'),
             "nombre": request.POST.get('name'),
             "direccion": request.POST.get('dir'),
-            "programa": int(request.POST.get('Programa')),
+            "programa": int(request.POST.get('programa')),
             "edad": int(request.POST.get('edad'))
         }
         MongoConnection.AddDocument(client, "Biblioteca", "estudiantes", document)

@@ -46,7 +46,7 @@
                         </div>
                         {% csrf_token %}
                         <div class="form-group">
-                            <select id="programas-select" class="form-input" name="name" id="name">
+                            <select id="programas-select" class="form-input" name="programa" id="programa">
                                 <option value="">Selecciona un programa</option>
                                 {%for data in programas_data%}
                                 <option value="{{data.0}}">{{ data.1 }}</option>
