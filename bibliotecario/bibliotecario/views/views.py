@@ -53,18 +53,15 @@ def prestamo(request):
             else:
                 multa = resultado['valor_multa_dia']
                 print(multa)    
-            
-            
-            
-                    
-        """   
+               
         document = {"_id": nuevo_id,
-                    "estudiante_id": ObjectId(estudiante_id),
-                    "libro_id": ObjetcId(reques.POST.get('libro')),
+                    "estudiante_id": int(estudiante_id),
+                    "libro_id": int(request.POST.get('libro')),
                     "fecha_incio": fecha_in,
-                    "fecha_final": ,
-                    "multa": multa} """ 
-
+                    "fecha_final": fecha_fin,
+                    "multa": 0}
+        
+        MongoConnection.AddDocument(conexion, "Biblioteca", "Multas", document)
         return redirect('prestamo_url')
     
     return render(request, 'prestamos.html', context)
