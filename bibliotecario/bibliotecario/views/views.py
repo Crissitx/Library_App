@@ -32,20 +32,21 @@ def prestamo(request):
     
     if request.method == 'POST':
         nuevo_id = ObjectId()
-        estudiante_id = request.session['estudiante_id']
+        estudiante_id = request.session['estudiante_id'][0]
         fecha_in = request.POST.get('fecha_in')
         fecha_fin = request.POST.get('fecha_fin')
         print(fecha_in)
         print(fecha_fin)            
         dias =MongoConnection.calcular_dias_transcurridos(fecha_fin)
-        if 7 == 7 : 
+        print(dias)
+        if  dias < 0 : 
             multa = 0 
         else : 
             col = db['estudiantes']
             col2 = db['PROGRAMAS']
-            id_pro = col.find_one({'id_estudiante': estudiante_id})
-            id_pro =  id_pro['id_programa'] if id_pro else 0
-            resultado = col2.find_one({'programa': id_pro})
+            id_pro = col.find_one({'id_estudiante': estudiante_id })
+            id_programa =  id_pro['id_programa'] if id_pro else 0
+            resultado = col2.find_one({'programa': id_programa})
             yesno = resultado['MULTA'] if id_pro else "no"
             if yesno == "no":
                 multa = 0
