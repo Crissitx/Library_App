@@ -113,3 +113,7 @@ def registro(request):
 def menu(request):
     print(request.session['estudiante_id'])
     return render(request, 'menu.html')
+
+def historial(request):
+    print(request.session['estudiante_id'])
+    return render(request, 'historial.html')

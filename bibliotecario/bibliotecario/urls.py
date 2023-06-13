@@ -24,7 +24,9 @@ urlpatterns = [
     path('', views.login ,  name = ''),
     path('registro/', views.registro,  name = 'registro_url'),
     path('prestamo/', views.prestamo, name = 'prestamo_url'),
-    path('menu', views.menu, name = 'menu_url')
+    path('menu/', views.menu, name = 'menu_url'),
+    path('historial/', views.historial, name = 'historial_url'),
+    
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:
