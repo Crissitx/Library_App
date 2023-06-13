@@ -93,13 +93,38 @@ def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
     
 def UpdateMultas():
     try:
+        affectedDocuments = []
+
         client = ConnectToMongo()
         query = {}
         documents = SearchDocuments(client, "Biblioteca", "Multas", query)
 
         for document in documents:
-            if calculateDays(document["fecha_final"], document["fecha_inicio"]) < 0:
-                print("Multa en documento:", document)
+            diasTranscurridos = calcular_dias_transcurridos(document["fecha_final"])
+            if diasTranscurridos > 0:
+                multa = 0
+
+                db = client.Biblioteca
+                col = db['estudiantes']
+                col2 = db['PROGRAMAS']
+                id_pro = col.find_one({'id_estudiante': int(document["estudiante_id"]) })
+                id_programa =  id_pro['programa'] if id_pro else 0
+                resultado = col2.find_one({'PROGRAMA': id_programa})
+                yesno = resultado['MULTA'] if id_pro else "no"
+                if yesno == "no":
+                    multa = 0
+                else:
+                    multa = resultado['valor_multa_dia']
+
+                nuevaMulta = abs(diasTranscurridos) * multa
+
+                client["Biblioteca"]["Multas"].update_one({"_id": document["_id"]}, {"$set": {"multa": int(nuevaMulta)}})
+
+                affectedDocuments.append((document, nuevaMulta))
+        
+        print("Todas las multas han sido actualizadas. Documentos afectados:")
+        for affectedDocument in affectedDocuments:
+            print(affectedDocument[0], ". Multa actualizada", affectedDocument[1])
 
     except Exception as e:
         print(e)
@@ -108,10 +133,5 @@ def calcular_dias_transcurridos(fecha_anterior):
     fecha_anterior = datetime.strptime(fecha_anterior, "%Y-%m-%d").date()  # Convertir fecha_anterior a objeto date
     fecha_actual = date.today()  # Obtener la fecha actual como objeto date
     dias_transcurridos = (fecha_actual - fecha_anterior).days  # Calcular diferencia en días
-    print(dias_transcurridos)
-    return dias_transcurridos
-def calculateDays(fecha_inicio, fecha_fin):
-    fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()  # Convertir fecha_inicio a objeto date
-    fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()  # Convertir fecha_fin a objeto date
-    dias_transcurridos = (fecha_fin - fecha_inicio).days  # Calcular diferencia en días
+    #print("Dias transcurridos", dias_transcurridos)
     return dias_transcurridos
