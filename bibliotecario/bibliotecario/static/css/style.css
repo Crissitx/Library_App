@@ -161,6 +161,50 @@ body {
   position: relative;
   margin: 0 auto; }
 
+.container-menu{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center; }
+  
+.square1 {
+      width: 300px;
+      height: 300px;
+      display: inline-block;
+      background-image: url("/media/imagenes/prestamo.jpg");
+      background-size: contain;
+      background-size: 85%;
+      background-position: center;
+      background-repeat: no-repeat;
+      margin-right: 20px;
+      border: 2px solid black;
+      box-sizing: border-box;
+  }
+  
+.square2{
+    width: 300px;
+    height: 300px;
+    display: inline-block;
+    background-image: url("/media/imagenes/historial.jpg");
+    background-size: contain;
+    background-size: 85%;
+    background-position: center;
+    background-repeat: no-repeat;
+    margin-right: 20px;
+    border: 2px solid black;
+    box-sizing: border-box;
+  }
+  
+.square:last-child {
+      margin-right: 0; 
+  }
+  
+.square-text {
+    position: center;
+    background: wheat;
+  
+  }
+
 .display-flex {
   justify-content: space-between;
   -moz-justify-content: space-between;
