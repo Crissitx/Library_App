@@ -30,7 +30,6 @@ def login(request):
                     {"nombre": {"$regex": name, "$options": "i"}}
                 ]
             }
-
             results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter_)
             resultsList = list(results)
 
