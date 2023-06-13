@@ -91,12 +91,27 @@ def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
         print("Error al actualizar los documentos:", e)
         return False
     
+def UpdateMultas():
+    try:
+        client = ConnectToMongo()
+        query = {}
+        documents = SearchDocuments(client, "Biblioteca", "Multas", query)
+
+        for document in documents:
+            if calculateDays(document["fecha_final"], document["fecha_inicio"]) < 0:
+                print("Multa en documento:", document)
+
+    except Exception as e:
+        print(e)
+
 def calcular_dias_transcurridos(fecha_anterior):
     fecha_anterior = datetime.strptime(fecha_anterior, "%Y-%m-%d").date()  # Convertir fecha_anterior a objeto date
     fecha_actual = date.today()  # Obtener la fecha actual como objeto date
     dias_transcurridos = (fecha_actual - fecha_anterior).days  # Calcular diferencia en días
+    print(dias_transcurridos)
     return dias_transcurridos
-    
-    
-    
-    
+def calculateDays(fecha_inicio, fecha_fin):
+    fecha_inicio = datetime.strptime(fecha_inicio, "%Y-%m-%d").date()  # Convertir fecha_inicio a objeto date
+    fecha_fin = datetime.strptime(fecha_fin, "%Y-%m-%d").date()  # Convertir fecha_fin a objeto date
+    dias_transcurridos = (fecha_fin - fecha_inicio).days  # Calcular diferencia en días
+    return dias_transcurridos
