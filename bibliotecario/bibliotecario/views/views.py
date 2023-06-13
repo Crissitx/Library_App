@@ -1,13 +1,20 @@
+from datetime import date, timedelta
 from django.shortcuts import render
-from django.http import HttpResponse
-import pymongo
 from subprocess import Popen, PIPE
 import MongoConnection
 from django.shortcuts import redirect
 
     
 def prestamo(request):
-    return render(request, 'prestamos.html')
+    today = date.today()
+    max_days = 7
+    conexion = MongoConnection.ConnectToMongo()
+    db = conexion.Biblioteca
+    libros = db.libro.distinct('Titulo_libro')
+    context = {'libros': libros,
+               'today': today,
+               'max_days': max_days,}
+    return render(request, 'prestamos.html', context)
 
 def login(request):
     client = MongoConnection.ConnectToMongo()
