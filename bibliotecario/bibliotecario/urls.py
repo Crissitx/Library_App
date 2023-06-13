@@ -23,6 +23,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.login ,  name = ''),
     path('registro/', views.registro,  name = 'registro_url'),
+    path('prestamo/', views.prestamo, name = 'prestamo_url'),
 ]+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

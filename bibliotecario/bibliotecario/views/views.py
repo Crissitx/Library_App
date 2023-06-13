@@ -6,8 +6,8 @@ import MongoConnection
 from django.shortcuts import redirect
 
     
-def index(request):
-    return HttpResponse("¡Hola, mundo!")
+def prestamo(request):
+    return render(request, 'prestamos.html')
 
 def login(request):
     client = MongoConnection.ConnectToMongo()
