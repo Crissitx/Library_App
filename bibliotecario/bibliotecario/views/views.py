@@ -59,7 +59,7 @@ def registro(request):
             "edad": request.POST.get('edad')
         }
         MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
-        return redirect(login())
+        return redirect('/')
     return render(request, 'register.html')
 
 def contact(request):
