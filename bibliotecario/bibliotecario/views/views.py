@@ -93,3 +93,6 @@ def registro(request):
         MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return redirect('/')
     return render(request, 'register.html')
+
+def menu(request):
+    return render(request, 'menu.html')
