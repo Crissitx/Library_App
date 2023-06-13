@@ -68,6 +68,8 @@ def registro(request):
     programas_data = zip(id_programas, nombres)
 
     context = {'programas_data': programas_data}
+
+    print("Context succesfully sended")
     
     if request.method == 'POST':
         db = client.Biblioteca
