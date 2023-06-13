@@ -121,3 +121,7 @@ def menu(request):
     context = {'student_name': results[0]['nombre'],}
 
     return render(request, 'menu.html', context)
+
+def historial(request):
+    print(request.session['estudiante_id'])
+    return render(request, 'historial.html')
