@@ -44,8 +44,15 @@
                             </div>          
                             <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
                         </div>
+                        {% csrf_token %}
                         <div class="form-group">
-                            <input type="number" class="form-input" name="Programa" id="Programa" placeholder="Programa"/>
+                            <select id="programas-select" class="form-input" name="name" id="name">
+                                <option value="">Selecciona un programa</option>
+                                {%for data in programas_data%}
+                                <option value="{{data.0}}">{{ data.1 }}</option>
+                                {% endfor %}
+                            </select>
+                            <!-- <input type="number" class="form-input" name="Programa" id="Programa" placeholder="Programa"/> -->
                         </div>
                         <div class="form-group">
                             <!-- <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" /> -->

@@ -52,10 +52,20 @@ def login(request):
         return render(request, "login.html")
 
 def registro(request):        
-    conexion = MongoConnection.ConnectToMongo()
+    client = MongoConnection.ConnectToMongo()
+    
+    db = client['Biblioteca']
+    collection = db['PROGRAMAS']
+    
+    id_programas = db.PROGRAMAS.distinct('PROGRAMA')
+    nombre_programas = 
+
+    programas_data = zip(id_programas, nombre_programas)
+
+    context = {'programas_data': programas_data}
     
     if request.method == 'POST':
-        db = conexion.Biblioteca
+        db = client.Biblioteca
         last_document = db.estudiantes.find().sort("_id", -1).limit(1)
         doc_list = list(last_document)
         last_id = doc_list[0]["_id"] if len(doc_list) > 0 else 0
@@ -69,9 +79,9 @@ def registro(request):
             "programa": int(request.POST.get('Programa')),
             "edad": int(request.POST.get('edad'))
         }
-        MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
+        MongoConnection.AddDocument(client, "Biblioteca", "estudiantes", document)
         return redirect('/')
-    return render(request, 'register.html')
+    return render(request, 'register.html', context)
 
 def contact(request):
     return render(request, 'contact.html')
