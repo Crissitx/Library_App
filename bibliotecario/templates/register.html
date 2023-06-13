@@ -33,22 +33,30 @@
                             <input type="text" class="form-input" name="dir" id="dir" placeholder="Direccion"/>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-input" name="password" id="password" placeholder="Documento"/>
+                            <div class="input-wrapper">
+                                <select name="doc_type" id="doc_type" class="form-input">
+                                  <option value="TI">TI</option>
+                                  <option value="CC">CC</option>
+                                </select>
+                            </div>
+                            <div class="input-wrapper">
+                                <input type="number" class="form-input" name="password" id="password" placeholder="Documento"/>
+                            </div>          
                             <span toggle="#password" class="zmdi zmdi-eye field-icon toggle-password"></span>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-input" name="Programa" id="Programa" placeholder="Programa"/>
+                            <input type="number" class="form-input" name="Programa" id="Programa" placeholder="Programa"/>
                         </div>
                         <div class="form-group">
-                            <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-                            <label for="agree-term" class="label-agree-term"><span><span></span></span>Acepto todos los terminos y condiciones <a href="https://nodos.com.co/legal/terms/" class="term-service" target="_blank">Terminos de servicio</a></label>
+                            <!-- <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" /> -->
+                            <label for="agree-term" class="label-agree-term"><span><span></span></span>Al registrarte, aceptas todos los <a href="https://nodos.com.co/legal/terms/" class="term-service" target="_blank">Terminos y condiciones</a></label>
                         </div>
                         <div class="form-group">
                             <input type="submit" name="submit" id="submit" class="form-submit" value="Registrarse"/>
                         </div>
                     </form>
                     <p class="loginhere">
-                        Ya tienes una cuenta? <a href="{% url '' %}" class="loginhere-link">Inicia seccion</a>
+                        Ya tienes una cuenta? <a href="{% url '' %}" class="loginhere-link">Inicia sesion</a>
                     </p>
                 </div>
             </div>

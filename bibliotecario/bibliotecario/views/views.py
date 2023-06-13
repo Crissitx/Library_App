@@ -63,11 +63,11 @@ def registro(request):
         document = {
             "_id": new_id,
             "id_estudiante": new_id,
-            "documento": request.POST.get('password'),
+            "documento": request.POST.get('doc_type') + "-" + request.POST.get('password'),
             "nombre": request.POST.get('name'),
             "direccion": request.POST.get('dir'),
-            "programa": request.POST.get('Programa'),
-            "edad": request.POST.get('edad')
+            "programa": int(request.POST.get('Programa')),
+            "edad": int(request.POST.get('edad'))
         }
         MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return redirect('/')
