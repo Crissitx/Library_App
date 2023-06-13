@@ -129,7 +129,8 @@ span{
   font-family: 'Roboto';
   margin-bottom: 0px;
   font-size: 20px;
-  color: #ebebeb;
+  color: #fff;
+  text-decoration: none;
 }
 
 h2 {
