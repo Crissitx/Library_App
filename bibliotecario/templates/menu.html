@@ -13,7 +13,10 @@
     <header>
         <nav>
           <ul>
-            <li><input type="submit" name="submit" id="submit" class="form-submit" value="Cerrar sesion"/>
+            <form method="POST" id="signup-form" class="signup-form">
+                {% csrf_token %}
+                <li><input type="submit" name="submit" id="submit" class="form-submit" value="Cerrar sesion"/>
+            </form>
           </ul>
         </nav>
       </header>
