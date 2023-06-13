@@ -22,9 +22,13 @@ def prestamo(request):
     print(estudiante_id)
     if request.method == 'POST':
         nuevo_id = ObjectId()
-      
+        """   
         document = {"_id": nuevo_id,
-                    "estudiante_id": estudiante_id,}
+                    "estudiante_id": ObjectId(estudiante_id),
+                    "libro_id":,
+                    "fecha_incio":,
+                    "fecha_final":,
+                    "multa": 0} """ 
 
         return redirect('prestamo_url')
     
@@ -36,7 +40,6 @@ def login(request):
         if request.method == 'POST':
             name = request.POST.get('name')
             doc = request.POST.get('password')
-            docp = doc
             filter_ = {
                 "$and": [
                     {"documento": {"$regex": doc}},
@@ -48,14 +51,7 @@ def login(request):
             resultsList = list(results)
 
             if len(resultsList) > 0:
-                db = client.Biblioteca
                 print("Conexion exitosa, bienvenid@:", name)
-                filter =  {
-                "$and": [
-                    {"documento": {"$regex": doc}},
-                    {"nombre": {"$regex": name, "$options": "i"}}
-                ]
-            }
                 results = MongoConnection.SearchDocuments(client, "Biblioteca", "estudiantes", filter_)
                 estudiante_ids = [str(estudiante["_id"]) for estudiante in results]
                 id_estudiante = estudiante_ids if estudiante_ids else 0
