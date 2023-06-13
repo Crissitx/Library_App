@@ -88,21 +88,3 @@ def UpdateDocuments(client: pymongo.MongoClient, db_name: str, collection_name: 
     except pymongo.errors.WriteError as e:
         print("Error al actualizar los documentos:", e)
         return False
-    
-#client = ConnectToMongo()
-
-# UPDATE TEST
-#if client:
-#    filter = {"id_area": 1}
-#    update = {"DESCRIPCION_AREA": "Literatura"}
-#    UpdateDocument(client, "Biblioteca", "area", filter, update)
-
-# ADD TEST
-#if client:
-#    document = {"id_area": 12, "DESCRIPCION_AREA": "Artistica"}
-#    AddDocument(client, "Biblioteca", "area", document)
-
-#REMOVE TEST
-#if client:
-#    filter = {"id_area": 12}
-#    RemoveDocuments(client, "Biblioteca", "area", filter)

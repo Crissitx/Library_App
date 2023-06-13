@@ -1,13 +1,22 @@
+from datetime import date, timedelta
 from django.shortcuts import render
-from django.http import HttpResponse
-import pymongo
-from subprocess import Popen, PIPE
 import MongoConnection
 from django.shortcuts import redirect
 
+def add_days(date_value, days):
+    return date_value + timedelta(days=days)
     
 def prestamo(request):
-    return render(request, 'prestamos.html')
+    today = date.today()
+    max_days = 7
+    conexion = MongoConnection.ConnectToMongo()
+    db = conexion.Biblioteca
+    libros = db.libro.distinct('Titulo_libro')
+    max_days = add_days(today, max_days)
+    context = {'libros': libros,
+               'today': today,
+               'max_days': max_days,}
+    return render(request, 'prestamos.html', context)
 
 def login(request):
     client = MongoConnection.ConnectToMongo()
@@ -27,9 +36,11 @@ def login(request):
 
             if len(resultsList) > 0:
                 print("Conexion exitosa, bienvenid@:", name)
+                
+                request.session['username'] = name
                 # NO SE QUE MAS HACER DESDE AQUI: ATT CRIS
             else:
-                print("Tuki, no existe persona con ese nombre")
+                print("Tuki, no existe persona con ese nombre/documento")
 
             return render(request, "login.html")
         else:
@@ -52,11 +63,11 @@ def registro(request):
         document = {
             "_id": new_id,
             "id_estudiante": new_id,
-            "documento": request.POST.get('password'),
+            "documento": request.POST.get('doc_type') + "-" + request.POST.get('password'),
             "nombre": request.POST.get('name'),
             "direccion": request.POST.get('dir'),
-            "programa": request.POST.get('Programa'),
-            "edad": request.POST.get('edad')
+            "programa": int(request.POST.get('Programa')),
+            "edad": int(request.POST.get('edad'))
         }
         MongoConnection.AddDocument(conexion, "Biblioteca", "estudiantes", document)
         return redirect('/')

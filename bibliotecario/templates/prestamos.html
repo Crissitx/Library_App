@@ -16,15 +16,19 @@
             <div class="container">
                 <div class="signup-content">
                     <form method="POST" id="signup-form" class="signup-form">
+                        {% csrf_token %}
                         <h2 class="form-title">Prestamos de libros</h2>
                         <div class="form-group">
                             <select id="programas-select" class="form-input" name="name" id="name">
-                                <option value="">Selecciona un programa</option>
+                                <option value="">Selecciona un libro</option>
+                                {%for libro in libros%}
+                                <option>{{ libro}}</option>
+                                {% endfor %}
                               </select>
                         </div>
                         <div class="form-group">
                             <label for="fecha">Selecciona una fecha</label>
-                            <input type="date" id="fecha" name="fecha" class="form-input" name="name" id="name" placeholder="Nombre" >
+                            <input type="date" id="fecha"min= "{{ today }}" max =" {{ max_days }} " name="fecha" class="form-input" name="name" id="name" placeholder="Nombre" >
                         </div>
                         <div class="form-group">
                             <input type="submit" name="submit" id="submit" class="form-submit" value="Prestar Libro"/>
