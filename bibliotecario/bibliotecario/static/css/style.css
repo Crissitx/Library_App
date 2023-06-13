@@ -319,7 +319,7 @@ body {
   background-image: url('../../media/imagenes/downArrow.png'); /* Ruta a tu imagen de flecha */
   background-position: right; /* Posición de la imagen ajustada */
   background-repeat: no-repeat;
-  padding-right: 25px;
+  padding-right: 15px;
   background-origin: content-box; /* Asegurar que la imagen esté dentro del contenido del select */
   background-size: auto 150%; /* Ajustar la imagen al ancho y altura de la caja */
 }
