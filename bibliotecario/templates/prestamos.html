@@ -19,7 +19,7 @@
                         {% csrf_token %}
                         <h2 class="form-title">Prestamos de libros</h2>
                         <div class="form-group">
-                            <select id="programas-select" class="form-input" name="name" id="name">
+                            <select id="libros-select" class="form-input" name="libro" id="libro">
                                 <option value="">Selecciona un libro</option>
                                 {%for libro in libros%}
                                 <option>{{ libro}}</option>
