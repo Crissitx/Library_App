@@ -56,11 +56,16 @@ def registro(request):
     
     db = client['Biblioteca']
     collection = db['PROGRAMAS']
-    
-    id_programas = db.PROGRAMAS.distinct('PROGRAMA')
-    nombre_programas = 
 
-    programas_data = zip(id_programas, nombre_programas)
+    id_programas = db.PROGRAMAS.distinct('PROGRAMA')
+
+    nombres = []
+
+    for id_programa in id_programas:
+        result = collection.find_one({'PROGRAMA': id_programa}, {'NOMBRE': 1})
+        nombres.append(result['NOMBRE'])
+
+    programas_data = zip(id_programas, nombres)
 
     context = {'programas_data': programas_data}
     
