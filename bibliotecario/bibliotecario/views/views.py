@@ -155,27 +155,25 @@ def historial(request):
     db = client['Biblioteca']
     collection = db['Multas']
     collection2 = db['libro']
-    prestados = collection.find({'estudiante_id': estudiante_id})
+    prestados = collection.find()
     libros = []
     fechaInicial = []
     fechafinal = []
     multa = []
     for p in prestados:
+        print("hola fooor")
         libros.append(p['libro_id'])
         fechaInicial.append(p['fecha_incio'])
         fechafinal.append(p['fecha_final'])
         multa.append(p['multa_id'])
-                        
+                    
                 
+    print(fechafinal)           
+                                
     libros_nombres = []
-    if libros != None:
-        print ("hola fir")
-        for libro_id in libros:
-            
-            libro = collection2.find_one({'Id_libro': libro_id})
-       # if libro:
-           # libros_nombres.append(libro['nombre'])                   
-                        
+    for libro in libros:
+            result = collection2.find_one({'ID:libro': libro}, {'NOMBRE': 1})
+            libros.append(result['NOMBRE'])
                          
     data = zip((libros_nombres, fechaInicial, fechafinal, multa))     
     contex = {'data': data}
